@@ -80,34 +80,37 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
   Widget build(BuildContext context) {
     return SafeArea(
         top: false,
-        bottom: false,
+        bottom: true,
         child: Padding(
-          padding: const EdgeInsets.only(top: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavigationBarItem(
-                index: 0,
-                label: 'Home',
-                icon: CupertinoIcons.home,
-                isSelected: (selectedIndex == 0),
-                onTap: handleItemSelected,
-              ),
-              _NavigationBarItem(
-                index: 1,
-                label: 'New Message',
-                icon: CupertinoIcons.bubble_left,
-                isSelected: (selectedIndex == 1),
-                onTap: handleItemSelected,
-              ),
-              _NavigationBarItem(
-                index: 2,
-                label: 'History',
-                icon: CupertinoIcons.clock,
-                isSelected: (selectedIndex == 2),
-                onTap: handleItemSelected,
-              ),
-            ],
+          padding: const EdgeInsets.all(1.0),
+          child: Container(
+            margin: const EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _NavigationBarItem(
+                  index: 0,
+                  label: 'Home',
+                  icon: CupertinoIcons.home,
+                  isSelected: (selectedIndex == 0),
+                  onTap: handleItemSelected,
+                ),
+                _NavigationBarItem(
+                  index: 1,
+                  label: 'New Message',
+                  icon: CupertinoIcons.bubble_left,
+                  isSelected: (selectedIndex == 1),
+                  onTap: handleItemSelected,
+                ),
+                _NavigationBarItem(
+                  index: 2,
+                  label: 'History',
+                  icon: CupertinoIcons.clock,
+                  isSelected: (selectedIndex == 2),
+                  onTap: handleItemSelected,
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -139,7 +142,7 @@ class _NavigationBarItem extends StatelessWidget {
       child: SizedBox(
         height: 40,
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 20.0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: Icon(
             icon,
             size: 20,
