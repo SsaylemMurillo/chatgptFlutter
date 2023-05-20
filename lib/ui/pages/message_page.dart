@@ -11,181 +11,167 @@ class MessagePage extends StatefulWidget {
 }
 
 class _MessagePageState extends State<MessagePage> {
-  final pageTitles = const [
-    'Examples',
-    'Capabilities',
-    'Limitations',
-  ];
-  final _textController = TextEditingController();
-
+  List<String> userMessages = [];
   @override
-  void dispose() {
-    _textController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: ListView.builder(
+            itemCount: userMessages.length,
+            itemBuilder: (BuildContext context, int index) {
+              return MessageOwnBubble(message: userMessages[index]);
+            }),
+        bottomNavigationBar: const MessageBar());
+  }
+}
+
+class MessageBar extends StatefulWidget {
+  const MessageBar({Key? key}) : super(key: key);
+  @override
+  State<MessageBar> createState() => _MessageBarState();
+}
+
+class _MessageBarState extends State<MessageBar> {
+  final TextEditingController _textController = TextEditingController();
+
+  void sendMessage() {
+    if (_textController.text.isNotEmpty) {
+      setState(() {
+        //messages.add(_textController.text);
+      });
+      _textController.clear();
+    } else {}
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 100,
-              width: 100,
-              margin: const EdgeInsets.all(0.0),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.contain,
-                  image: AssetImage('assets/chatgpt.png'),
+    return Container(
+      padding: const EdgeInsets.all(10.0),
+      height: 65,
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF40414F),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: TextField(
+                  controller: _textController,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Send a message...',
+                  ),
                 ),
               ),
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Text(
-              "ChatGPT",
-              style: TextStyle(fontSize: 20),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            const _InformationCard(
-              label: 'Examples',
-              icon: CupertinoIcons.sun_max,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const _InformationCard(
-              label: 'Capabilities',
-              icon: CupertinoIcons.bolt,
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const _InformationCard(
-              label: 'Limitations',
-              icon: CupertinoIcons.exclamationmark_triangle,
-            ),
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              height: 65,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF40414F),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: TextField(
-                          controller: _textController,
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Send a message...',
-                          ),
-                        ),
-                      ),
-                    ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+            child: GestureDetector(
+              onTap: sendMessage,
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: AppTheme.accentColor,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Icon(
+                    CupertinoIcons.paperplane,
+                    color: Colors.white,
+                    size: 18,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: AppTheme.accentColor,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsets.all(15.0),
-                          child: Icon(
-                            CupertinoIcons.paperplane,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            )
-          ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MessageOwnBubble extends StatelessWidget {
+  const MessageOwnBubble({Key? key, required this.message}) : super(key: key);
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          decoration: BoxDecoration(
+            color: const Color(0xFF40414F),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              message,
+              style: const TextStyle(fontSize: 14),
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class _InformationCard extends StatelessWidget {
-  const _InformationCard({
-    Key? key,
-    required this.label,
-    required this.icon,
-  }) : super(key: key);
+class MessageChatGPTBubble extends StatelessWidget {
+  const MessageChatGPTBubble({Key? key, required this.message})
+      : super(key: key);
 
-  final String label;
-  final IconData icon;
+  final String message;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              backgroundColor: const Color(0xFF40414F),
-              content: Container(
-                height: 100,
-                width: 100,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
+    return Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 5.0),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Row(
+            textDirection: TextDirection.rtl,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  height: 35,
+                  width: 35,
+                  decoration: BoxDecoration(
+                    color: Colors.greenAccent,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Icon(
+                    CupertinoIcons.cloud_fill,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
-                child: const Text("Here is a request."),
               ),
-            );
-          },
-        );
-      },
-      child: Container(
-        height: 100,
-        width: 100,
-        padding: const EdgeInsets.all(8.0),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: const Color(0xFF40414F),
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Color(0xFFB1B3C1)),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Icon(
-              icon,
-              size: 20,
-            ),
-          ],
-        ),
-      ),
-    );
+              Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF40414F),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0, vertical: 10),
+                        child: Text(message),
+                      ),
+                    ),
+                  ]),
+            ],
+          ),
+        ));
   }
 }
