@@ -12,20 +12,35 @@ class MessagePage extends StatefulWidget {
 
 class _MessagePageState extends State<MessagePage> {
   List<String> userMessages = [];
+
+  void addMessage(String message) {
+    setState(() {
+      userMessages.add(message);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView.builder(
-            itemCount: userMessages.length,
-            itemBuilder: (BuildContext context, int index) {
-              return MessageOwnBubble(message: userMessages[index]);
-            }),
-        bottomNavigationBar: const MessageBar());
+        appBar: AppBar(title: const Text('New Conversation')),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView.builder(
+              itemCount: userMessages.length,
+              itemBuilder: (BuildContext context, int index) {
+                return MessageOwnBubble(message: userMessages[index]);
+              }),
+        ),
+        bottomNavigationBar: MessageBar(
+          onSendMessage: addMessage,
+        ));
   }
 }
 
 class MessageBar extends StatefulWidget {
-  const MessageBar({Key? key}) : super(key: key);
+  final Function(String) onSendMessage;
+
+  const MessageBar({Key? key, required this.onSendMessage}) : super(key: key);
   @override
   State<MessageBar> createState() => _MessageBarState();
 }
@@ -35,11 +50,9 @@ class _MessageBarState extends State<MessageBar> {
 
   void sendMessage() {
     if (_textController.text.isNotEmpty) {
-      setState(() {
-        //messages.add(_textController.text);
-      });
+      widget.onSendMessage(_textController.text);
       _textController.clear();
-    } else {}
+    }
   }
 
   @override

@@ -50,8 +50,6 @@ class _InformationCard extends StatelessWidget {
       child: Container(
         height: 100,
         width: 100,
-        padding: const EdgeInsets.all(8.0),
-        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: const Color(0xFF40414F),
           borderRadius: BorderRadius.circular(5),
@@ -88,10 +86,12 @@ class MainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
+          height: 100,
+          width: 100,
           margin: const EdgeInsets.all(0.0),
           decoration: const BoxDecoration(
             image: DecorationImage(
@@ -105,7 +105,10 @@ class MainContent extends StatelessWidget {
         ),
         const Text(
           "ChatGPT",
-          style: TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 20,
+          ),
         ),
         const SizedBox(
           height: 40,
